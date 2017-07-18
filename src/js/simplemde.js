@@ -108,11 +108,6 @@ function createIcon(options, enableTooltips, shortcuts) {
 		}
 	}
 
-	// create element hook
-	if(options.whenEleCreate && typeof options.whenEleCreate === "function") {
-		el = options.whenEleCreate(el);
-	}
-
 	el.tabIndex = -1;
 	el.className = options.className;
 	return el;
@@ -1313,45 +1308,23 @@ function SimpleMDE(options) {
 
 
 	// Handle toolbar
-	if(options.toolbar !== false && options.toolbar instanceof Object) {
+	if(options.toolbar === undefined) {
 		// Initialize
-		var toolbar = [];
+		options.toolbar = [];
 
 
 		// Loop over the built in buttons, to get the preferred order
 		for(var key in toolbarBuiltInButtons) {
 			if(toolbarBuiltInButtons.hasOwnProperty(key)) {
 				if(key.indexOf("separator-") != -1) {
-					toolbar.push("|");
+					options.toolbar.push("|");
 				}
 
 				if(toolbarBuiltInButtons[key].default === true || (options.showIcons && options.showIcons.constructor === Array && options.showIcons.indexOf(key) != -1)) {
-					toolbar.push(toolbarBuiltInButtons[key]);
+					options.toolbar.push(key);
 				}
 			}
 		}
-
-		// handle some custom toolbar-button
-		if(options.toolbar instanceof Object) {
-			var i, key, customButtonInfo, buttonInfo;
-
-			for(key in options.toolbar) {
-				customButtonInfo = options.toolbar[key];
-				for(i = 0; i < toolbar.length; i++) {
-					buttonInfo = toolbar[i];
-					if(buttonInfo instanceof Object && buttonInfo.name === key) {
-						buttonInfo = _mergeProperties(buttonInfo, customButtonInfo);
-						break;
-					}
-				}
-
-				if(i === toolbar.length) {
-					toolbar.push(customButtonInfo);
-				}
-			}
-		}
-
-		options.toolbar = toolbar;
 	}
 
 
@@ -1683,6 +1656,11 @@ SimpleMDE.prototype.createToolbar = function(items) {
 		return;
 	}
 	var i;
+	for(i = 0; i < items.length; i++) {
+		if(toolbarBuiltInButtons[items[i]] != undefined) {
+			items[i] = toolbarBuiltInButtons[items[i]];
+		}
+	}
 
 	var bar = document.createElement("div");
 	bar.className = "editor-toolbar";
