@@ -1421,7 +1421,9 @@ SimpleMDE.prototype.replaceSelection = _replaceSelection;
 SimpleMDE.prototype.markdown = function(text) {
 	if(marked) {
 		// Initialize
-		var markedOptions = {};
+		var markedOptions = {
+			langPrefix: "hljs "
+		};
 
 
 		// Update options
