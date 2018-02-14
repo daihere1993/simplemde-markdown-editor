@@ -1434,8 +1434,8 @@ SimpleMDE.prototype.markdown = function(text) {
 		}
 
 		if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
-			markedOptions.highlight = function(code) {
-				return window.hljs.highlightAuto(code).value;
+			markedOptions.highlight = function(code, lang) {
+				return window.hljs.highlight(code, lang).value;
 			};
 		}
 
