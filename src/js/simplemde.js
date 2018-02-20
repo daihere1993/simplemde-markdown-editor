@@ -1435,6 +1435,7 @@ SimpleMDE.prototype.markdown = function(text) {
 
 		if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
 			markedOptions.highlight = function(code, lang) {
+				lang = lang || 'bash';
 				return window.hljs.highlight(lang, code).value;
 			};
 		}
